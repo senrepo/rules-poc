@@ -1,6 +1,11 @@
 using System;
+using model;
+using Newtonsoft.Json.Linq;
 using rules;
+using rules.AuthorityRules;
 using Xunit;
+using Moq;
+using System.Collections.Generic;
 
 namespace unitTest
 {
@@ -9,17 +14,63 @@ namespace unitTest
         [Fact]
         public void Test_CreateEngine()
         {
-
-
-            var engine = new Engine();
+            var processorList = new List<IProcessor>() { (new Mock<IProcessor>()).Object };
+            var engine = new Engine(processorList);
+            Assert.IsAssignableFrom<IEngine>(engine);
+            //TODO: //find a way to test a method returing void and which doesn't throw any excetions. something like Assert.DoesNotThrow
             engine.Run();
         }
+
+        // [Fact]
+        // public void Test_Engine_FakeAuthorityRule()
+        // {
+        //     var model = new Mock<IModel>();
+        //     var context = new Mock<IContext>();
+
+        //     var authorityRuleProcessorMock = new Mock<AuthorityRuleProcessor>(model.Object, context.Object);
+        //     var processorList = new List<IProcessor>() { authorityRuleProcessorMock.Object };
+
+        //     var engine = new Engine(processorList);
+
+        //     var fakeAuthorityRule = new FakeAuthorityRule();
+        //     var rules = new List<IAuthorityRuleMarker>();
+        //     rules.Add(fakeAuthorityRule);
+
+        //     authorityRuleProcessorMock.Setup(m => m.Rules).Returns(rules);
+
+        //     engine.Run();
+        // }
+
+
+
+        [Fact]
+        public void Test_Engine_FakeAuthorityRule()
+        {
+            var model = new Mock<IModel>();
+            var context = new Mock<IContext>();
+
+            var authorityRuleProcessor = new AuthorityRuleProcessor(model.Object, context.Object);
+            var processorList = new List<IProcessor>() { authorityRuleProcessor };
+
+            var engine = new Engine(processorList);
+
+            var fakeAuthorityRule = new TestAuthorityRule();
+            authorityRuleProcessor.Rules.Add(fakeAuthorityRule);
+
+            engine.Run();
+        }
+
     }
 
-    public class TestProcessor : Processor
+    public class FakeAuthorityRule : AuthorityRule<string>, IAuthorityRuleMarker
     {
+        public FakeAuthorityRule()
+        {
+        }
 
+        public override string Execute(IModel model, IContext context, IDictionary<string, object> extraModels)
+        {
+            return "10";
+        }
     }
-
-
 }

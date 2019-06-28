@@ -6,9 +6,10 @@ namespace rules
 {
     public abstract class Processor<T> : IProcessor
     {
-        public abstract JObject GetDependencyConfig();
+        protected abstract JObject GetDependencyConfig();
+        protected abstract void ExecuteRules();
 
-        protected List<T> rules = new List<T>();
+        public virtual List<T> Rules {get; set;} = new List<T>();
         protected readonly IModel model;
         protected readonly IContext context;
         protected readonly JObject dependencyConfig;
@@ -22,18 +23,17 @@ namespace rules
 
         public virtual void Execute()
         {
-            Load();
-            Sort();
-
-            
+            LoadRules();
+            SortRules();
+            ExecuteRules();
         }
 
-        protected virtual void Load()
+        public virtual void LoadRules()
         {
             //load all objects with Marker interface T and add them rules list
         }
 
-        protected virtual void Sort()
+        public virtual void SortRules()
         {
             //sort the derivations with dependency json
             
