@@ -29,11 +29,5 @@ namespace rules.AuthorityRules
 
         public override string Name => this.GetType().Name;
 
-        //TODO: Discover the type and return type with reflection and after following properties will go away
-        public override Type ResultType => typeof(int);
-
-        public override string Category => "SimpleAuthorityRule";
-
-
     }
 }

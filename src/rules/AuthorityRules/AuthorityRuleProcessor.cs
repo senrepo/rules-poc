@@ -32,43 +32,11 @@ namespace rules.AuthorityRules
                 Sort();
             }
 
-            //TODO: use the reflection to discover the category and result type automatically
-            //TODO: strip off the namespace and use the class type in the switch statements
-
             foreach (var rule in rules)
             {
-                if (rule.Category == "SimpleAuthorityRule")
-                {
-                    switch (rule.ResultType.ToString())
-                    {
-                        case "System.Int32":
-                            simpleAuthorityRuleFactory.ExecuteRule((ISimpleAuthorityRule<int>)rule);
-                            break;
-                    }
-                    continue;
-                }
-
-                if (rule.Category == "DatabaseAuthorityRule")
-                {
-                    switch (rule.ResultType.ToString())
-                    {
-                        case "System.Double":
-                            databaseAuthorityRuleFactory.ExecuteRule((IDatabaseAuthorityRule<double>)rule);
-                            break;
-                    }
-                    continue;
-                }
-
-                if (rule.Category == "ComplexAuthorityRule")
-                {
-                    switch (rule.ResultType.ToString())
-                    {
-                        case "model.IDiscount":
-                            complexAuthorityRuleFactory.ExecuteRule((IComplexAuthorityRule<IDiscount>)rule);
-                            break;
-                    }
-                    continue;
-                }
+                if (rule is ISimpleAuthorityRule<int>) simpleAuthorityRuleFactory.ExecuteRule((ISimpleAuthorityRule<int>)rule);
+                else if (rule is IDatabaseAuthorityRule<double>) databaseAuthorityRuleFactory.ExecuteRule((IDatabaseAuthorityRule<double>)rule);
+                else if (rule is IComplexAuthorityRule<IDiscount>) complexAuthorityRuleFactory.ExecuteRule((IComplexAuthorityRule<IDiscount>)rule);
             }
 
         }
