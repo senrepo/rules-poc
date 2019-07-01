@@ -25,6 +25,8 @@ namespace rules.AuthorityRules
             model.SetJson<double>(jsonPath,result);
         }
 
+        public override string Name => this.GetType().Name;
+
         //TODO: Discover the type and return type with reflection and after following properties will go away
         public override string Category => "DatabaseAuthorityRule";
 

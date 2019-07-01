@@ -13,10 +13,12 @@ namespace rules.AuthorityRules
         private readonly ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory;
         private readonly IDatabaseAuthorityRuleFactory databaseAuthorityRuleFactory;
         private readonly IComplexAuthorityRuleFactory complexAuthorityRuleFactory;
+        private readonly IRuleConfig ruleConfig;
 
-        public AuthorityRuleProcessor(ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory, IDatabaseAuthorityRuleFactory databaseAuthorityRuleFactory,
+        public AuthorityRuleProcessor(IRuleConfig ruleConfig, ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory, IDatabaseAuthorityRuleFactory databaseAuthorityRuleFactory,
         IComplexAuthorityRuleFactory complexAuthorityRuleFactory)
         {
+            this.ruleConfig = ruleConfig;
             this.complexAuthorityRuleFactory = complexAuthorityRuleFactory;
             this.simpleAuthorityRuleFactory = simpleAuthorityRuleFactory;
             this.databaseAuthorityRuleFactory = databaseAuthorityRuleFactory;
@@ -66,7 +68,7 @@ namespace rules.AuthorityRules
                             break;
                     }
                     continue;
-                }                
+                }
             }
 
         }
@@ -80,7 +82,7 @@ namespace rules.AuthorityRules
 
         public void Sort()
         {
-
+            //TODO: sort the rules based on the Rule Config
         }
     }
 

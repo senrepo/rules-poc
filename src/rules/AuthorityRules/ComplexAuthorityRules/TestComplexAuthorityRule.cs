@@ -28,6 +28,8 @@ namespace rules.AuthorityRules
              model.SetJson<IDiscount>(jsonPath,result);
         }
 
+        public override string Name => this.GetType().Name;
+
         //TODO: Discover the type and return type with reflection and after following properties will go away
         public override string Category => "ComplexAuthorityRule";
 

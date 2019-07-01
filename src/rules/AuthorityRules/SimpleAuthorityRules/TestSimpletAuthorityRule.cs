@@ -24,14 +24,16 @@ namespace rules.AuthorityRules
         public void Update(int result, IModel model, IContext context)
         {
             //update the result to the model
-            model.SetJson<int>(jsonPath,result);
+            model.SetJson<int>(jsonPath, result);
         }
+
+        public override string Name => this.GetType().Name;
 
         //TODO: Discover the type and return type with reflection and after following properties will go away
         public override Type ResultType => typeof(int);
 
         public override string Category => "SimpleAuthorityRule";
 
-  
+
     }
 }
