@@ -5,6 +5,6 @@ namespace rules
 {
     public interface IRuleFactory 
     {
-        ArrayList Load();
+        List<Rule> Load();
     }
 }

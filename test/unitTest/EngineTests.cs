@@ -6,56 +6,47 @@ using rules.AuthorityRules;
 using Xunit;
 using Moq;
 using System.Collections.Generic;
+using rules.Repository;
 
-namespace unitTest
+namespace EngineTests
 {
     public class EngineTests
     {
-        // [Fact]
-        // public void Test_CreateEngine()
-        // {
-        //     var processorList = new List<IProcessor>() { (new Mock<IProcessor>()).Object };
-        //     var engine = new Engine(processorList);
-        //     Assert.IsAssignableFrom<IEngine>(engine);
-        //     //TODO: find a way to test a method returing void and which doesn't throw any excetions. something like Assert.DoesNotThrow
-        //     engine.Run();
-        // }
+        [Fact]
+        public void Test_Create_Engine()
+        {
+            var processorList = new List<IRuleProcessor>() { (new Mock<IRuleProcessor>()).Object };
+            var engine = new RuleEngine(processorList);
+            Assert.IsAssignableFrom<IRuleEngine>(engine);
+        }
 
         [Fact]
-        public void Test_Engine_SimpleAuthorityRule()
+        public void Test_Engine_With_AuthorityRuleProcessor()
         {
-            var modelMock = new Mock<IModel>();
-            var contextMock = new Mock<IContext>();
+            var jsonModel = @"{'TestSimpleAuthorityRule':'','TestDatabaseAuthorityRule':'','TestComplexAuthorityRule':''}";
+            var model = new Model(jsonModel);
+            var context = new Context();
+            var repository = new Repository();
 
-            var simpleAuthorityRuleFactory = new SimpleAuthorityRuleFactory(modelMock.Object, contextMock.Object);
-            var authorityRuleProcessor = new AuthorityRuleProcessor(simpleAuthorityRuleFactory);
+            var simpleAuthorityRuleFactory = new SimpleAuthorityRuleFactory(model, context);
+            var databaseAuthorityRuleFactory = new DatabaseAuthorityRuleFactory(model, context, repository);
+            var complexAuthorityRuleFactory = new ComplexAuthorityRuleFactory(model, context, repository);
+            var authorityRuleProcessor = new AuthorityRuleProcessor(simpleAuthorityRuleFactory, databaseAuthorityRuleFactory, complexAuthorityRuleFactory);
             var processorList = new List<IRuleProcessor>() { authorityRuleProcessor };
             var engine = new RuleEngine(processorList);
 
             engine.Run();
+
+            var simpleRuleResult = model.GetJson<int>("$.TestSimpleAuthorityRule");
+            Assert.Equal(10, simpleRuleResult);
+
+            var databaseRuleResult = model.GetJson<double>("$.TestDatabaseAuthorityRule");
+            Assert.Equal(1.1, databaseRuleResult);
+
+            var complexRuleResult = model.GetJson<Discount>("$.TestComplexAuthorityRule");
+            Assert.IsType<Discount>(complexRuleResult);
+            Assert.Equal("PaidInFull", complexRuleResult.Name);
         }
-
-
-
-        //     [Fact]
-        //     public void Test_Engine_FakeAuthorityRule()
-        //     {
-        //         var model = new Mock<IModel>();
-        //         var context = new Mock<IContext>();
-
-        //         var authorityRuleProcessor = new AuthorityRuleProcessor(model.Object, context.Object);
-        //         var processorList = new List<IProcessor>() { authorityRuleProcessor };
-
-        //         var engine = new Engine(processorList);
-
-        //         var fakeAuthorityRule = new TestAuthorityRule();
-        //         authorityRuleProcessor.Rules.Add(fakeAuthorityRule);
-
-        //         engine.Run();
-        //     }
-
-        // }
-
 
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using model;
@@ -7,48 +8,79 @@ namespace rules.AuthorityRules
 {
     public class AuthorityRuleProcessor : IRuleProcessor
     {
-        private  Dictionary<string, ArrayList> rulesDictionary = new Dictionary<string, ArrayList>();
-
-       // private List<?> rules = new List<?>();
+        private List<Rule> rules = new List<Rule>();
 
         private readonly ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory;
+        private readonly IDatabaseAuthorityRuleFactory databaseAuthorityRuleFactory;
+        private readonly IComplexAuthorityRuleFactory complexAuthorityRuleFactory;
 
-        public AuthorityRuleProcessor(ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory)
+        public AuthorityRuleProcessor(ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory, IDatabaseAuthorityRuleFactory databaseAuthorityRuleFactory,
+        IComplexAuthorityRuleFactory complexAuthorityRuleFactory)
         {
+            this.complexAuthorityRuleFactory = complexAuthorityRuleFactory;
             this.simpleAuthorityRuleFactory = simpleAuthorityRuleFactory;
-          
+            this.databaseAuthorityRuleFactory = databaseAuthorityRuleFactory;
         }
 
         public void Execute()
         {
-            if (rulesDictionary.Values.Count == 0 ) 
+            if (rules.Count == 0)
             {
                 Load();
                 Sort();
             }
 
-            foreach (var key in rulesDictionary.Keys)
+            //TODO: use the reflection to discover the category and result type automatically
+            //TODO: strip off the namespace and use the class type in the switch statements
+
+            foreach (var rule in rules)
             {
-                foreach (var rule in rulesDictionary[key])
+                if (rule.Category == "SimpleAuthorityRule")
                 {
-                    switch (key)
+                    switch (rule.ResultType.ToString())
                     {
-                        case "SimpleRules":
-                            simpleAuthorityRuleFactory.ExecuteRule(new SimpleTestAuthorityRule());
+                        case "System.Int32":
+                            simpleAuthorityRuleFactory.ExecuteRule((ISimpleAuthorityRule<int>)rule);
                             break;
                     }
+                    continue;
                 }
+
+                if (rule.Category == "DatabaseAuthorityRule")
+                {
+                    switch (rule.ResultType.ToString())
+                    {
+                        case "System.Double":
+                            databaseAuthorityRuleFactory.ExecuteRule((IDatabaseAuthorityRule<double>)rule);
+                            break;
+                    }
+                    continue;
+                }
+
+                if (rule.Category == "ComplexAuthorityRule")
+                {
+                    switch (rule.ResultType.ToString())
+                    {
+                        case "model.IDiscount":
+                            complexAuthorityRuleFactory.ExecuteRule((IComplexAuthorityRule<IDiscount>)rule);
+                            break;
+                    }
+                    continue;
+                }                
             }
+
         }
 
         public void Load()
         {
-            rulesDictionary.Add("SimpleRules", simpleAuthorityRuleFactory.Load());
+            rules.AddRange(simpleAuthorityRuleFactory.Load());
+            rules.AddRange(databaseAuthorityRuleFactory.Load());
+            rules.AddRange(complexAuthorityRuleFactory.Load());
         }
 
         public void Sort()
         {
-           
+
         }
     }
 

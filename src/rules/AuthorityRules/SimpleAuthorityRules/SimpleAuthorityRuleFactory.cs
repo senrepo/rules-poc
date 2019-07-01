@@ -17,16 +17,17 @@ namespace rules.AuthorityRules
 
         public void ExecuteRule<T>(ISimpleAuthorityRule<T> rule)
         {
-           rule.Execute(model,context);
+           var result = rule.Execute(model,context);
+           rule.Update(result, model, context);
         }
 
-        public ArrayList Load()
+        public List<Rule> Load()
         {
-            var arrayList = new ArrayList() {
-                new SimpleTestAuthorityRule()
+            var list = new List<Rule>() {
+                 new TestSimpleAuthorityRule()
             };
 
-            return arrayList;
+            return list;
         }
 
     }
