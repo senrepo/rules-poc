@@ -2,7 +2,7 @@
 
 namespace rules
 {
-    public interface IEngine
+    public interface IRuleEngine
     {
         void Run();
     }

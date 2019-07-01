@@ -11,66 +11,51 @@ namespace unitTest
 {
     public class EngineTests
     {
-        [Fact]
-        public void Test_CreateEngine()
-        {
-            var processorList = new List<IProcessor>() { (new Mock<IProcessor>()).Object };
-            var engine = new Engine(processorList);
-            Assert.IsAssignableFrom<IEngine>(engine);
-            //TODO: //find a way to test a method returing void and which doesn't throw any excetions. something like Assert.DoesNotThrow
-            engine.Run();
-        }
-
         // [Fact]
-        // public void Test_Engine_FakeAuthorityRule()
+        // public void Test_CreateEngine()
         // {
-        //     var model = new Mock<IModel>();
-        //     var context = new Mock<IContext>();
-
-        //     var authorityRuleProcessorMock = new Mock<AuthorityRuleProcessor>(model.Object, context.Object);
-        //     var processorList = new List<IProcessor>() { authorityRuleProcessorMock.Object };
-
+        //     var processorList = new List<IProcessor>() { (new Mock<IProcessor>()).Object };
         //     var engine = new Engine(processorList);
-
-        //     var fakeAuthorityRule = new FakeAuthorityRule();
-        //     var rules = new List<IAuthorityRuleMarker>();
-        //     rules.Add(fakeAuthorityRule);
-
-        //     authorityRuleProcessorMock.Setup(m => m.Rules).Returns(rules);
-
+        //     Assert.IsAssignableFrom<IEngine>(engine);
+        //     //TODO: find a way to test a method returing void and which doesn't throw any excetions. something like Assert.DoesNotThrow
         //     engine.Run();
         // }
 
-
-
         [Fact]
-        public void Test_Engine_FakeAuthorityRule()
+        public void Test_Engine_SimpleAuthorityRule()
         {
-            var model = new Mock<IModel>();
-            var context = new Mock<IContext>();
+            var modelMock = new Mock<IModel>();
+            var contextMock = new Mock<IContext>();
 
-            var authorityRuleProcessor = new AuthorityRuleProcessor(model.Object, context.Object);
-            var processorList = new List<IProcessor>() { authorityRuleProcessor };
-
-            var engine = new Engine(processorList);
-
-            var fakeAuthorityRule = new TestAuthorityRule();
-            authorityRuleProcessor.Rules.Add(fakeAuthorityRule);
+            var simpleAuthorityRuleFactory = new SimpleAuthorityRuleFactory(modelMock.Object, contextMock.Object);
+            var authorityRuleProcessor = new AuthorityRuleProcessor(simpleAuthorityRuleFactory);
+            var processorList = new List<IRuleProcessor>() { authorityRuleProcessor };
+            var engine = new RuleEngine(processorList);
 
             engine.Run();
         }
 
-    }
 
-    public class FakeAuthorityRule : AuthorityRule<string>, IAuthorityRuleMarker
-    {
-        public FakeAuthorityRule()
-        {
-        }
 
-        public override string Execute(IModel model, IContext context, IDictionary<string, object> extraModels)
-        {
-            return "10";
-        }
+        //     [Fact]
+        //     public void Test_Engine_FakeAuthorityRule()
+        //     {
+        //         var model = new Mock<IModel>();
+        //         var context = new Mock<IContext>();
+
+        //         var authorityRuleProcessor = new AuthorityRuleProcessor(model.Object, context.Object);
+        //         var processorList = new List<IProcessor>() { authorityRuleProcessor };
+
+        //         var engine = new Engine(processorList);
+
+        //         var fakeAuthorityRule = new TestAuthorityRule();
+        //         authorityRuleProcessor.Rules.Add(fakeAuthorityRule);
+
+        //         engine.Run();
+        //     }
+
+        // }
+
+
     }
 }

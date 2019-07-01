@@ -1,30 +1,55 @@
+using System.Collections;
+using System.Collections.Generic;
 using model;
 using Newtonsoft.Json.Linq;
 
 namespace rules.AuthorityRules
 {
-    public class AuthorityRuleProcessor : Processor<IAuthorityRuleMarker>
+    public class AuthorityRuleProcessor : IRuleProcessor
     {
-        public AuthorityRuleProcessor(IModel model, IContext context) : base(model, context)
-        {
+        private  Dictionary<string, ArrayList> rulesDictionary = new Dictionary<string, ArrayList>();
 
+       // private List<?> rules = new List<?>();
+
+        private readonly ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory;
+
+        public AuthorityRuleProcessor(ISimpleAuthorityRuleFactory simpleAuthorityRuleFactory)
+        {
+            this.simpleAuthorityRuleFactory = simpleAuthorityRuleFactory;
+          
         }
 
-        protected override void ExecuteRules()
+        public void Execute()
         {
-           foreach(var obj in this.Rules)
-           {
-               var rule = (IAuthorityRule<object>) obj;
-               var extraModel = rule.GetExtraModels(this.model, this.context);
-               var result = rule.Execute(this.model, this.context, extraModel);
-               rule.UpdateModel(result, this.model, this.context, extraModel);
-           }
+            if (rulesDictionary.Values.Count == 0 ) 
+            {
+                Load();
+                Sort();
+            }
+
+            foreach (var key in rulesDictionary.Keys)
+            {
+                foreach (var rule in rulesDictionary[key])
+                {
+                    switch (key)
+                    {
+                        case "SimpleRules":
+                            simpleAuthorityRuleFactory.ExecuteRule(new SimpleTestAuthorityRule());
+                            break;
+                    }
+                }
+            }
         }
 
-        protected override JObject GetDependencyConfig()
+        public void Load()
         {
-           //read the dependenchy config from file source or database
-           return JObject.Parse("{}");
+            rulesDictionary.Add("SimpleRules", simpleAuthorityRuleFactory.Load());
+        }
+
+        public void Sort()
+        {
+           
         }
     }
+
 }

@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace rules
 {
-    public class Engine : IEngine
+    public class RuleEngine : IRuleEngine
     {
-        private readonly List<IProcessor> processors;
+        private readonly List<IRuleProcessor> processors;
 
-        public Engine(List<IProcessor> processors)
+        public RuleEngine(List<IRuleProcessor> processors)
         {
             this.processors = processors;
         }
