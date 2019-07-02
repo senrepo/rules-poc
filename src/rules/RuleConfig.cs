@@ -16,8 +16,8 @@ namespace rules
         public static List<RuleConfig> GetAll()
         {
             var list = new List<RuleConfig> {
-                new RuleConfig() { Name = "TestDatabaseAuthorityRule", DependentRule = "TestSimpleAuthorityRule" },
-                new RuleConfig() { Name = "TestComplexAuthorityRule", DependentRule = "TestDatabaseAuthorityRule" },
+                new RuleConfig() { Name = "DemoDatabaseAuthorityRule", DependentRule = "DemoSimpleAuthorityRule" },
+                new RuleConfig() { Name = "DemoComplexAuthorityRule", DependentRule = "DemoDatabaseAuthorityRule" },
             };
 
             return list;
