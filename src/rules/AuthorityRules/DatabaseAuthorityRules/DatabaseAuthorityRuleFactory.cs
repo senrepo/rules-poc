@@ -27,7 +27,7 @@ namespace rules.AuthorityRules
         public List<Rule> Load()
         {
             var list = new List<Rule>() {
-                 new TestDatabaseAuthorityRule()
+                 new DemoDatabaseAuthorityRule()
             };
 
             return list;

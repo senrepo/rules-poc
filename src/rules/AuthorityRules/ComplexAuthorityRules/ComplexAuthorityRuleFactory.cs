@@ -29,7 +29,7 @@ namespace rules.AuthorityRules
         {
             var list = new List<Rule>()
             {
-                new TestComplexAuthorityRule(discountRuleEvaluator)
+                new DemoComplexAuthorityRule(discountRuleEvaluator)
             };
 
             return list;

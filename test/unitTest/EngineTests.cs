@@ -23,7 +23,7 @@ namespace EngineTests
         [Fact]
         public void Test_Engine_With_AuthorityRuleProcessor()
         {
-            var jsonModel = @"{'TestSimpleAuthorityRule':'','TestDatabaseAuthorityRule':'','TestComplexAuthorityRule':''}";
+            var jsonModel = @"{'SimpleAuthorityRule':'','DatabaseAuthorityRule':'','ComplexAuthorityRule':''}";
             var model = new Model(jsonModel);
             var context = new Context();
             var repository = new Repository();
@@ -38,13 +38,13 @@ namespace EngineTests
 
             engine.Run();
 
-            var simpleRuleResult = model.GetJson<int>("$.TestSimpleAuthorityRule");
+            var simpleRuleResult = model.GetJson<int>("$.SimpleAuthorityRule");
             Assert.Equal(10, simpleRuleResult);
 
-            var databaseRuleResult = model.GetJson<double>("$.TestDatabaseAuthorityRule");
+            var databaseRuleResult = model.GetJson<double>("$.DatabaseAuthorityRule");
             Assert.Equal(1.1, databaseRuleResult);
 
-            var complexRuleResult = model.GetJson<Discount>("$.TestComplexAuthorityRule");
+            var complexRuleResult = model.GetJson<Discount>("$.ComplexAuthorityRule");
             Assert.IsType<Discount>(complexRuleResult);
             Assert.Equal("PaidInFull", complexRuleResult.Name);
         }

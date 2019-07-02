@@ -4,23 +4,21 @@ using model;
 namespace rules.AuthorityRules
 {
 
-    public class TestSimpleAuthorityRule : Rule, ISimpleAuthorityRule<int>
+    public class DemoSimpleAuthorityRule : Rule, ISimpleAuthorityRule<int>
     {
 
-        private string jsonPath => "$.TestSimpleAuthorityRule";
+        private string jsonPath => "$.SimpleAuthorityRule";
 
-        public TestSimpleAuthorityRule()
+        public DemoSimpleAuthorityRule()
         {
         }
 
         public int Execute(IModel model, IContext context)
         {
+            //Rules logic
             return 10;
         }
 
-        /*
-            TODO: Move it to base class for common implementation
-         */
         public void Update(int result, IModel model, IContext context)
         {
             //update the result to the model

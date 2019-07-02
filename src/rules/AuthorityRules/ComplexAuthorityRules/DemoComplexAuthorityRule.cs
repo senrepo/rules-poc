@@ -4,24 +4,22 @@ using rules.Repository;
 
 namespace rules.AuthorityRules
 {
-    public class TestComplexAuthorityRule : Rule, IComplexAuthorityRule<IDiscount>
+    public class DemoComplexAuthorityRule : Rule, IComplexAuthorityRule<IDiscount>
     {
-        private string jsonPath => "$.TestComplexAuthorityRule";
+        private string jsonPath => "$.ComplexAuthorityRule";
         private readonly IDiscountRuleEvaluator discountRuleEvaluator;
 
-        public TestComplexAuthorityRule(IDiscountRuleEvaluator discountRuleEvaluator)
+        public DemoComplexAuthorityRule(IDiscountRuleEvaluator discountRuleEvaluator)
         {
             this.discountRuleEvaluator = discountRuleEvaluator;
         }
 
         public IDiscount Execute(IModel model, IContext context, IRepository repository)
         {
+            //rule logic
             return discountRuleEvaluator.Evaluate(model, context, repository);
         }
 
-        /*
-            TODO: Move it to base class for common implementation
-         */
         public void Update(IDiscount result, IModel model, IContext context)
         {
             //update the result to model

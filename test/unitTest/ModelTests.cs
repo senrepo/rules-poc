@@ -12,13 +12,13 @@ namespace ModelTests
             string jsonPayload = "{'author': '', 'count': 0, 'discount': ''}";
             var model = new Model(jsonPayload);
 
-            model.SetJson<string>("$.author", "NewAuthorSpecifiedByUser");
+            model.SetJson<string>("$.author", "author");
             var author = model.GetJson<string>("$.author");
-            Assert.Equal("NewAuthorSpecifiedByUser", author);
+            Assert.Equal("author", author);
 
             model.SetJson<int>("$.count", 1);
             var count = model.GetJson<int>("$.count");
-            Assert.Equal("NewAuthorSpecifiedByUser", author);
+            Assert.Equal(1, count);
 
             model.SetJson<Discount>("$.discount", new Discount() { Name = "PaidInFull" });
             var discount = model.GetJson<Discount>("$.discount");
