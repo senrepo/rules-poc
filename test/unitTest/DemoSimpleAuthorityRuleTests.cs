@@ -8,7 +8,7 @@ namespace unitTest
     public class DemoSimpleAuthorityRuleTests
     {
         [Fact]
-        public void Test_Rule()
+        public void Test_DemoSimpleAuthorityRule()
         {
             var jsonModel = @"{'SimpleAuthorityRule':''}";
             var model = new Model(jsonModel);
