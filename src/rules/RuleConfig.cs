@@ -15,6 +15,7 @@ namespace rules
 
         public static List<RuleConfig> GetAll()
         {
+            //TODO: use the typof or nameof for more typesafe
             var list = new List<RuleConfig> {
                 new RuleConfig() { Name = "DemoDatabaseAuthorityRule", DependentRule = "DemoSimpleAuthorityRule" },
                 new RuleConfig() { Name = "DemoComplexAuthorityRule", DependentRule = "DemoDatabaseAuthorityRule" },

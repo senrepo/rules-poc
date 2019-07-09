@@ -26,12 +26,15 @@ namespace rules.AuthorityRules
 
         public void Execute()
         {
+            //TODO: Lazy load singleton OR make it eager load if any performance impact
             if (rules.Count == 0)
             {
                 Load();
                 Sort();
             }
 
+            //TODO: find a better option if any to check rule interface type with generic parameter something like below  -
+            // if (rule is ISimpleAuthorityRule<T>) simpleAuthorityRuleFactory.ExecuteRule((ISimpleAuthorityRule<T>)rule);
             foreach (var rule in rules)
             {
                 if (rule is ISimpleAuthorityRule<int>) simpleAuthorityRuleFactory.ExecuteRule((ISimpleAuthorityRule<int>)rule);

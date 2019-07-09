@@ -23,6 +23,7 @@ namespace rules.AuthorityRules
 
         public List<Rule> Load()
         {
+            //TODO: Alternatively use the Reflection to load dynamically
             var list = new List<Rule>() {
                  new DemoSimpleAuthorityRule()
             };
